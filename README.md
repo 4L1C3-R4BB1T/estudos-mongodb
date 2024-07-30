@@ -1,3 +1,15 @@
+## MongoDB
+
+* Data is organized into documents, collections, and databases.
+
+* Documents are stored in BSON, which supports a large range of data types, including all JSON data types, dates, numbers, and ObjectIds.
+
+* Every document requires an _id field, which acts as a primary key or unique identifier. If an inserted document doesn’t have an _id field, MongoDB automatically generates one.
+
+* MongoDB has a flexible schema, which means that documents with different structures can be stored in the same collection.
+
+---
+
 ## Document Structure
 
 The values in a document can be any data type, including strings, objects, arrays, booleans, nulls, dates, ObjectIds, and more. 
