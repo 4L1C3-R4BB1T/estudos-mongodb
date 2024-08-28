@@ -69,7 +69,7 @@ MongoDB has a flexible schema model, which means that documents in the same coll
 
 Data modeling is the process of defining how data is stored and the process of defining the relationships that exist among different entities in the data.
 
-A proper data model
+A proper data model:
 - Makes it easier to manage your data
 - Makes queries more efficient
 - Uses less memory and CPU
@@ -80,6 +80,26 @@ Types of relationships among data:
 - One-to-many
 - Many-to-many
 
-Embedded documents store related data in a single document.
+**One-to-one** is a relationship where a data entity in one set is connected to exactly one data entity in another set.
 
-Reference relationships store data by linking references in one document to another document.
+**One-to-many** is a relationship where a data entity in one set is connected to any number of data entities in another set.
+
+**Many-to-many** is a relationship where any number of data entities in one set are connected to any number of data entities in another set.
+
+**Embedded** documents store related data in a single document. Embedding data simplifies queries because it avoids application joins. It fulfills the principle that data that is accessed together should be stored together. 
+
+- Embedding data provides better performance for read operations. 
+- Embedded documents enable you to store all kinds of related information in a single document.
+- Embedding data will make the document larger and impact write performance. As more data is added to each document, the entire document is rewritten into MongoDB data storage.
+- Unbounded documents caused by embedding will eventually run into storage problems by exceeding the maximum document size of 16 MB.
+- To prevent unbounded document sizes that may result from embedding, you can break up your data into multiple collecitons and use references to keep frequently accessed data together.
+
+**Reference** relationships store data by linking references in one document to another document. 
+
+- Referencing allows you to store data in two different collections and ensure that the collections are related. This avoids duplication of data. 
+- Referencing avoids duplication of data and, in most cases, results in smaller documents.
+- References save the _id field of one document in another document as a link between the two.
+
+
+
+
