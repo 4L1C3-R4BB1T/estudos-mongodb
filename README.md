@@ -4,7 +4,7 @@
 
 * Documents are stored in BSON, which supports a large range of data types, including all JSON data types, dates, numbers, and ObjectIds.
 
-* Every document requires an _id field, which acts as a primary key or unique identifier. If an inserted document doesn’t have an _id field, MongoDB automatically generates one.
+* Every document requires an ```_id``` field, which acts as a primary key or unique identifier. If an inserted document doesn’t have an ```_id``` field, MongoDB automatically generates one.
 
 * MongoDB has a flexible schema, which means that documents with different structures can be stored in the same collection.
 
@@ -76,15 +76,9 @@ A proper data model:
 - Reduces costs
 
 Types of relationships among data:
-- One-to-one
-- One-to-many
-- Many-to-many
-
-**One-to-one** is a relationship where a data entity in one set is connected to exactly one data entity in another set.
-
-**One-to-many** is a relationship where a data entity in one set is connected to any number of data entities in another set.
-
-**Many-to-many** is a relationship where any number of data entities in one set are connected to any number of data entities in another set.
+- **One-to-one:** relationship where a data entity in one set is connected to exactly one data entity in another set.
+- **One-to-many:** relationship where a data entity in one set is connected to any number of data entities in another set.
+- **Many-to-many:** relationship where any number of data entities in one set are connected to any number of data entities in another set.
 
 **Embedded** documents store related data in a single document. Embedding data simplifies queries because it avoids application joins. It fulfills the principle that data that is accessed together should be stored together. 
 
@@ -98,9 +92,32 @@ Types of relationships among data:
 
 - Referencing allows you to store data in two different collections and ensure that the collections are related. This avoids duplication of data. 
 - Referencing avoids duplication of data and, in most cases, results in smaller documents.
-- References save the _id field of one document in another document as a link between the two.
+- References save the ```_id``` field of one document in another document as a link between the two.
+
+---
+
+## Connection
+
+#### MongoDB Shell
+
+```bash
+mongosh "mongodb+srv://mdb-training-cluster.swnn5.mongodb.net/myFirstDatabase" --apiVersion 1 --username MDBUser
+```
+
+#### MongoDB Compass
+
+```bash
+mongodb+srv://MDBUser:<password>@mdb-training-cluster.swnn5.mongodb.net/test
+```
+
+#### Application
+
+```bash
+mongodb+srv://MDBUser:<password>@mdb-training-cluster.swnn5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+```
 
 ---
 
 🔗 Links
-* [MongoDB](https://learn.mongodb.com)  
+* [MongoDB University](https://learn.mongodb.com)  
+* [Documentation](https://www.mongodb.com/docs/manual)
