@@ -62,3 +62,24 @@ MongoDB has a flexible schema model, which means that documents in the same coll
     }
 }
 ```
+
+---
+
+## Data Modeling
+
+Data modeling is the process of defining how data is stored and the process of defining the relationships that exist among different entities in the data.
+
+A proper data model
+- Makes it easier to manage your data
+- Makes queries more efficient
+- Uses less memory and CPU
+- Reduces costs
+
+Types of relationships among data:
+- One-to-one
+- One-to-many
+- Many-to-many
+
+Embedded documents store related data in a single document.
+
+Reference relationships store data by linking references in one document to another document.
