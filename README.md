@@ -123,57 +123,57 @@ mongodb+srv://MDBUser:<password>@mdb-training-cluster.swnn5.mongodb.net/myFirstD
 #### Insert
 
 ```js
-/* Single Document */
-db.<collection>.insertOne(<document>)
+/* single document */
+db.collection.insertOne(document)
 
-/* Multiple Documents */
-db.<collection>.insertMany([<document1>, <document2>, ...])
+/* multiple documents */
+db.collection.insertMany([document1, document2, ...])
 ```
 
 #### Find
 
 ```js
-db.<collection>.find({ <field>: <value> })
+db.collection.find({ field: value })
 ```
 
 - **Comparison Operators**
 
 ```js
 /* equals values in the array*/
-db.<collection>.find({ <field>: { $in: [<value1>, <value2>, ....] } })
+db.collection.find({ field: { $in: [value1, value2, ....] } })
 
 /* not in the values in the array*/
-db.<collection>.find({ <field>: { $nin: [<value1>, <value2>, ....] } })
+db.collection.find({ field: { $nin: [value1, value2, ....] } })
 
 /* equals */
-db.<collection>.find({ <field>: { $eq: <value> } })
+db.collection.find({ field: { $eq: value } })
 
 /* not equals */
-db.<collection>.find({ <field>: { $ne: <value> } })
+db.collection.find({ field: { $ne: value } })
 
 /* greater than */
-db.<collection>.find({ <field>: { $gt: <value> } })
+db.collection.find({ field: { $gt: value } })
 
 /* less than */
-db.<collection>.find({ <field>: { $lt: <value> } })
+db.collection.find({ field: { $lt: value } })
 
 /* greater than or equal to */
-db.<collection>.find({ <field>: { $gte: <value> } })
+db.collection.find({ field: { $gte: value } })
 
 /* less than or equal to */
-db.<collection>.find({ <field>: { $lte: <value> } })
+db.collection.find({ field: { $lte: value } })
 ```
 
 - **Logical Operators**
 
 ```js
-db.<collection>.find({ $and: [{ <expression1> }, { <expression2> }, ...] })
+db.collection.find({ $and: [{ <expression1> }, { <expression2> }, ...] })
 
-db.<collection>.find({ <field>: { $not: { <operator-expression> } } })
+db.collection.find({ field: { $not: { <operator-expression> } } })
 
-db.<collection>.find({ $nor: [{ <expression1> }, { <expression2> }, ...] })
+db.collection.find({ $nor: [{ <expression1> }, { <expression2> }, ...] })
 
-db.<collection>.find({ $or: [{ <expression1> }, { <expression2> }, ...] })
+db.collection.find({ $or: [{ <expression1> }, { <expression2> }, ...] })
 
 ```
 
@@ -181,12 +181,12 @@ db.<collection>.find({ $or: [{ <expression1> }, { <expression2> }, ...] })
 
 ```js
 /* all elements */
-db.<collection>.find({ <field>: { $all: [<value1>, <value2>, ...] } })
+db.collection.find({ field: { $all: [value1, value2, ...] } })
 
 /* querying on array elements */
-db.<collection>.find({ <field>: { $elemMatch: { <query1>, <query2>, ... } } })
+db.collection.find({ field: { $elemMatch: { query1, query2, ... } } })
 
-db.<collection>.find({ <field>: { $size: <value> } });
+db.collection.find({ field: { $size: value } });
 ```
 
 ---
