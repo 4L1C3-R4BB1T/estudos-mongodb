@@ -167,13 +167,13 @@ db.collection.find({ field: { $lte: value } })
 - **Logical Operators**
 
 ```js
-db.collection.find({ $and: [{ <expression1> }, { <expression2> }, ...] })
+db.collection.find({ $and: [{ expression1 }, { expression2 }, ...] })
 
-db.collection.find({ field: { $not: { <operator-expression> } } })
+db.collection.find({ field: { $not: { operator-expression } } })
 
-db.collection.find({ $nor: [{ <expression1> }, { <expression2> }, ...] })
+db.collection.find({ $nor: [{ expression1 }, { expression2 }, ...] })
 
-db.collection.find({ $or: [{ <expression1> }, { <expression2> }, ...] })
+db.collection.find({ $or: [{ expression1 }, { expression2 }, ...] })
 
 ```
 
