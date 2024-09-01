@@ -245,6 +245,16 @@ db.podcasts.updateOne(
 )
 ```
 
+#### Delete
+
+```js
+/* removes a single document from a collection */
+db.collection.deleteOne(filter, { options })
+
+/* removes all documents that match the filter from a collection */
+db.collection.deleteMany(filter, { options })
+```
+
 ---
 
 🔗 Links
