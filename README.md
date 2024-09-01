@@ -186,7 +186,63 @@ db.collection.find({ field: { $all: [value1, value2, ...] } })
 /* querying on array elements */
 db.collection.find({ field: { $elemMatch: { query1, query2, ... } } })
 
-db.collection.find({ field: { $size: value } });
+db.collection.find({ field: { $size: value } })
+```
+
+#### Update
+
+```js
+/* replaces a single document that match a specified filter */
+db.collection.replaceOne(filter, replacement, { options })
+
+/* updates a single document that match a specified filter */
+db.collection.updateOne(filter, update, { options })
+
+/* update all documents that match a specified filter */
+db.collection.updateMany(filter, update, { options })
+
+/* find and replace a single document */
+db.collection.findAndModify(document)
+
+/* example */
+db.podcasts.findAndModify({
+    query: { _id: ObjectId("6261a92dfee1ff300dc80bf1") },
+    update: { $inc: { subscribers: 1 } },
+    new: true,
+})
+```
+
+- **$set:** replaces the value of a field with the specified value.
+
+```js
+db.podcasts.updateOne(
+    { _id: ObjectId("5e8f8f8f8f8f8f8f8f8f8f8") },
+    { $set: { subscribers: 98562 } }
+)
+
+db.books.updateMany(
+    { publishedDate: { $lt: new Date("2019-01-01") } },
+    { $set: { status: "LEGACY" } }
+)
+```
+
+- **upsert:** creates a new document if no documents match the filtered criteria.
+
+```js
+db.podcasts.updateOne(
+    { title: "The Developer Hub" },
+    { $set: { topics: ["databases", "MongoDB"] } },
+    { upsert: true }
+)
+```
+
+- **$push:** adds a new value to the hosts array field.
+
+```js
+db.podcasts.updateOne(
+    { _id: ObjectId("5e8f8f8f8f8f8f8f8f8f8f8") },
+    { $push: { hosts: "Nic Raboy" } }
+)
 ```
 
 ---
