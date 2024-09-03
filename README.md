@@ -189,6 +189,67 @@ db.collection.find({ field: { $elemMatch: { query1, query2, ... } } })
 db.collection.find({ field: { $size: value } })
 ```
 
+- **Sorting**
+
+```js
+/* 1 for ascending order, and -1 for descending order */
+db.collection.find(query).sort(sort)
+
+/* sorted alphabetically from A to Z */
+db.companies.find({ category_code: "music" }).sort({ name: 1 })
+
+/* sorted alphabetically from A to Z, ensure consistent sort order */
+db.companies.find({ category_code: "music" }).sort({ name: 1, _id: 1 })
+```
+
+- **Limiting**
+
+```js
+db.companies.find(query).limit(number)
+
+/* the three music companies with the highest number of employees */
+db.companies
+    .find({ category_code: "music" })
+    .sort({ number_of_employees: -1, _id: 1 })
+    .limit(3)
+```
+
+- **Include a Field**
+
+```js
+db.collection.find(query, { field: 1 })
+
+/* return business name, result, and _id fields only */
+db.inspections.find(
+    { sector: "Restaurant - 818" },
+    { business_name: 1, result: 1 }
+)
+```
+
+- **Exclude a Field**
+
+```js
+db.collection.find(query, { field: 0, field: 0 })
+
+/* exclude date and zip code */
+db.inspections.find(
+    { result: { $in: ["Pass", "Warning"] } },
+    { date: 0, "address.zip": 0 }
+)
+```
+
+- **Count Documents**
+
+```js
+db.collection.countDocuments(query, options)
+
+/* count number of docs in trip collection */
+db.trips.countDocuments({})
+
+/* count number of trips over 120 minutes by subscribers */
+db.trips.countDocuments({ tripduration: { $gt: 120 }, usertype: "Subscriber" })
+```
+
 #### Update
 
 ```js
