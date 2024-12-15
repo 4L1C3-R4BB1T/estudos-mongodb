@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bson.BsonValue;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -13,8 +14,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 
 public class Main {
 	public static void main(String[] args) {
@@ -76,6 +80,32 @@ public class Main {
 				Filters.eq("account_type", "checking"))).first();
 
 		System.out.println("Find First: " + doc.toJson());
+
+		// Update One
+		Bson queryUpdateOne = Filters.eq("account_id", "MDB87236121");
+		Bson updatesOne = Updates.combine(
+				Updates.set("account_status", "active"),
+				Updates.inc("balance", 100));
+		UpdateResult upResultOne = collection.updateOne(queryUpdateOne, updatesOne);
+		System.out.println("Update One: " + upResultOne.getModifiedCount());
+
+		// Update Many
+		Bson queryUpdateMany = Filters.eq("account_type", "savings");
+		Bson updatesMany = Updates.combine(Updates.set("minimum_balance", 100));
+		UpdateResult upResultMany = collection.updateMany(queryUpdateMany, updatesMany);
+		System.out.println("Update Many: " + upResultMany.getModifiedCount());
+
+		// Delete One
+		Bson queryDeleteOne = Filters.eq("account_holder", "john doe");
+		DeleteResult delResultOne = collection.deleteOne(queryDeleteOne);
+		System.out.println("Delete One: " + delResultOne.getDeletedCount());
+
+		// Delete Many
+		Bson queryDeleteMany = Filters.eq("account_status", "dormant");
+		DeleteResult delResultMany = collection.deleteMany(queryDeleteMany);
+		// DeleteResult delResultMany =
+		// collection.deleteMany(Filters.eq("account_status", "dormant"));
+		System.out.println("Delete Many: " + delResultMany.getDeletedCount());
 
 	}
 }
