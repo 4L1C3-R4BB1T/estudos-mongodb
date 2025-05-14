@@ -318,6 +318,186 @@ db.collection.deleteMany(filter, { options })
 
 ---
 
+## Aggregation
+
+- **Aggregation:** Collection and summary of data.
+- **Stage:** One of the built-in methods that can be completed on the data, but does not permanently alter it.
+- **Aggregation pipeline:** A series of stages completed on the data in order.
+
+```js
+db.collection.aggregate([
+    {
+        $stage1: {
+            { expression1 },
+            { expression2 }...
+        },
+        $stage2: {
+            { expression1 }...
+        }
+    }
+])
+```
+
+#### Stages
+
+- **$match:** filters for documents that match specified conditions.
+
+```js
+db.collection.aggregate([
+    {
+        $match: {
+            "field_name": "value"
+        }
+    }
+])
+
+/* example */
+db.zips.aggregate([
+    {   
+        $match: { 
+            state: "CA"
+        }
+    }
+])
+```
+
+- **$group:** groups documents by a group key.
+
+```js
+db.collection.aggregate([
+    {
+        $group:
+            {
+                _id: <expression>, // Group key
+                <field>: { <accumulator> : <expression> }
+            }
+    }
+])
+
+/* example */
+db.zips.aggregate([
+    {   
+        $match: { 
+            state: "CA"
+        }
+    },
+    {
+        $group: {
+            _id: "$city",
+            totalZips: { $count : { } }
+        }
+    }
+])
+```
+
+- **$sort:** sorts all input documents and returns them to the pipeline in sorted order. We use 1 to represent ascending order, and -1 to represent descending order.
+
+```js
+db.collection.aggregate([
+    {
+        $sort: {
+            "field_name": 1
+        }
+    }
+])
+```
+
+- **$limit:** returns only a specified number of records.
+
+```js
+db.collection.aggregate([
+    {
+        $limit: 5
+    }
+])
+
+/* example */
+db.zips.aggregate([
+    {
+        $sort: {
+            pop: -1
+        }
+    },
+    {
+        $limit:  5
+    }
+])
+```
+
+- **$project:** specifies the fields of the output documents. 1 means that the field should be included, and 0 means that the field should be supressed. The field can also be assigned a new value.
+
+```js
+db.collection.aggregate([
+    {
+        $project: {
+            state:1, 
+            zip:1,
+            population:"$pop",
+            _id:0
+        }
+    }
+])
+```
+
+- **$count:** creates a new document, with the number of documents at that stage in the aggregation pipeline assigned to the specified field name.
+
+```js
+db.collection.aggregate([
+    {
+        $count: "total_zips"
+    }
+])
+```
+
+- **$set:** creates new fields or changes the value of existing fields, and then outputs the documents with the new fields.
+
+```js
+db.collection.aggregate([
+    {
+        $set: {
+            place: {
+                $concat:["$city",",","$state"]
+            },
+            pop:10000
+        }
+    }
+])
+```
+
+- **$out:** writes the documents that are returned by an aggregation pipeline into a colection. Must be the last stage. Creates a nesw collection if it does not already exists. If collection exists, $out replaces the existing collection with new data.
+
+```js
+db.collection.aggregate([
+    {
+        $out: {
+            db: "<db>",
+            coll: "<newcollection>"
+        }
+    }
+])
+
+/* example */
+db.zips.aggregate([
+    {
+        $group: {
+            _id: "$state",
+            total_pop: { $sum: "$pop" }
+        }
+    }, 
+    {   
+        $match: { 
+            total_pop: { $lt: 1000000 }
+        }
+    },
+    {
+        $out: "small_states"
+    }
+])
+
+```
+
+---
+
 🔗 Links
 * [MongoDB University](https://learn.mongodb.com)  
 * [Documentation](https://www.mongodb.com/pt-br/docs/manual/tutorial/getting-started/)
