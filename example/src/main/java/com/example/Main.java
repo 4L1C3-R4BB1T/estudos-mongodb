@@ -13,7 +13,11 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertManyResult;
@@ -30,8 +34,8 @@ public class Main {
 		List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
 		databases.forEach(db -> System.out.println(db.toJson()));
 
-		MongoDatabase database = mongoClient.getDatabase("bank");
-		MongoCollection<Document> collection = database.getCollection("accounts");
+		MongoDatabase db = mongoClient.getDatabase("bank");
+		MongoCollection<Document> collection = db.getCollection("accounts");
 
 		// Insert One
 		Document inspection = new Document()
@@ -107,5 +111,49 @@ public class Main {
 		// collection.deleteMany(Filters.eq("account_status", "dormant"));
 		System.out.println("Delete Many: " + delResultMany.getDeletedCount());
 
+		// Aggregate
+		MongoCollection<Document> accounts2 = db.getCollection("accounts");
+
+		System.out.println("\nMatch Stage:");
+		matchStage(accounts2);
+
+		System.out.println("\n\nMatch and Group Stages:");
+		matchAndGroupStages(accounts2);
+
+		System.out.println("\n\nMatch, Sort and Group Stages:");
+		matchSortAndProjectStages(accounts2);
+
 	}
+
+	private static void matchStage(MongoCollection<Document> accounts) {
+		Bson matchStage = Aggregates.match(Filters.eq("account_id", "MDB79101843"));
+		System.out.println("Display aggregation results");
+		accounts.aggregate(Arrays.asList(matchStage)).forEach(document -> System.out.print(document.toJson()));
+	}
+
+	private static void matchAndGroupStages(MongoCollection<Document> accounts) {
+		Bson matchStage = Aggregates.match(Filters.eq("account_id", "MDB79101843"));
+		Bson groupStage = Aggregates.group("$account_type",
+				Accumulators.sum("total_balance", "$balance"),
+				Accumulators.avg("average_balance", "$balance"));
+		System.out.println("Display aggregation results");
+		accounts.aggregate(Arrays.asList(matchStage, groupStage))
+				.forEach(document -> System.out.print(document.toJson()));
+	}
+
+	private static void matchSortAndProjectStages(MongoCollection<Document> accounts) {
+		Bson matchStage = Aggregates
+				.match(Filters.and(Filters.gt("balance", 1500), Filters.eq("account_type", "checking")));
+		Bson sortStage = Aggregates.sort(Sorts.orderBy(Sorts.descending("balance")));
+		Bson projectStage = Aggregates
+				.project(Projections.fields(
+						Projections.include("account_id", "account_type", "balance"),
+						Projections.computed("euro_balance", new Document("$divide", Arrays.asList("$balance", 1.20F))),
+						Projections.excludeId()));
+		System.out.println("Display aggregation results");
+		accounts.aggregate(
+				Arrays.asList(matchStage, sortStage, projectStage))
+				.forEach(document -> System.out.print(document.toJson()));
+	}
+
 }
