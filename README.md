@@ -430,10 +430,10 @@ db.zips.aggregate([
 db.collection.aggregate([
     {
         $project: {
-            state:1, 
-            zip:1,
-            population:"$pop",
-            _id:0
+            state: 1, 
+            zip: 1,
+            population: "$pop",
+            _id: 0
         }
     }
 ])
@@ -458,7 +458,7 @@ db.collection.aggregate([
             place: {
                 $concat:["$city",",","$state"]
             },
-            pop:10000
+            pop: 10000
         }
     }
 ])
@@ -494,6 +494,85 @@ db.zips.aggregate([
     }
 ])
 
+```
+
+---
+
+## Indexes
+
+### Single Field Indexes
+
+#### Create a Single Field Index
+
+```js
+db.customers.createIndex({ birthdate: 1 })
+```
+
+#### Create a Unique Single Field Index
+
+```js
+db.customers.createIndex({ email: 1 }, { unique: true })
+```
+
+#### View the Indexes used in a Collection
+
+```js
+db.customers.getIndexes()
+```
+
+#### Check if an index is being used on a query
+
+```js
+db.customers.explain().find({ birthdate: { $gt: ISODate("1995-08-01") } })
+```
+
+### Multikey Indexes
+
+Any index where one of the indexed fields contains an array. The array can hold nested objects or other field types. In a compound index, only one field can be an array per index. 
+
+#### Create a Single field Multikey Index
+
+```js
+db.customers.createIndex({ accounts: 1 })
+```
+
+### Compound Indexes
+
+Index on multiple fields. Can be a multikey index if it includes an array field. Maximum of one array field per index. Support queries that match on the prefix of the fields.
+
+#### Create a Compound Index
+
+```js
+db.customers.createIndex({ active: 1, birthdate: -1, name: 1 })
+```
+
+#### Order of Fields in a Compound Index
+
+The order of the fields matters when creating the index and the sort order. It is recommended to list the fields in the following order: Equality, Sort, and Range.
+
+- Equality: field/s that matches on a single field value in a query
+- Sort: field/s that orders the results by in a query
+- Range: field/s that the query filter in a range of valid values
+
+### Deleting Indexes
+
+```js
+/* delete index by name */
+db.customers.dropIndex('active_1_birthdate_-1_name_1')
+
+/* delete index by key */
+db.customers.dropIndex({ active: 1, birthdate: -1, name: 1 })
+
+/* delete all the indexes from a collection */ 
+/* with the exception of the default index on _id */
+db.customers.dropIndexes()
+
+/* delete a specific list of indexes */
+db.collection.dropIndexes(['index1name', 'index2name', 'index3name'])
+
+/* hides an index */
+/* assess the impact of removing the index on query performance */
+db.customers.hideIndex({ email: 1 })
 ```
 
 ---
